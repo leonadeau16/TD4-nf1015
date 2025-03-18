@@ -10,7 +10,7 @@
 #include <span>
 using namespace std;
 
-struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
+class Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
 class ListeFilms {
 public:
@@ -75,14 +75,60 @@ private:
 
 using ListeActeurs = Liste<Acteur>;
 
-struct Film
-{
-	string titre, realisateur; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
-	int anneeSortie=0, recette=0; // Année de sortie et recette globale du film en millions de dollars
-	ListeActeurs acteurs;
-};
-
 struct Acteur
 {
 	string nom; int anneeNaissance=0; char sexe='\0';
+};
+
+class Item : public Affichable
+{
+public:
+
+	Item(string titre, int annee);
+
+	friend Film* lireFilm(istream& fichier, ListeFilms& listeFilms);
+	friend shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur) const;
+	// friend void lireFichierLivres(string cheminFichier, vector<shared_ptr<Item>> bibliotheque);
+
+private:
+
+	string titre_;
+	int anneeSortie_;
+};
+
+class Film : public Item
+{
+public:
+
+	Film();
+
+	friend Film* lireFilm(istream& fichier, ListeFilms& listeFilms);
+	friend shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur) const;
+
+private:
+
+	string realisateur_;
+	int recette_;
+	Liste<Acteur> acteurs_;
+};
+
+class Livre : public Item
+{
+public:
+
+	Livre(string titre, int annee, string auteur, int mCopiesVendues, int nPages);
+
+	// friend void lireFichierLivres(string cheminFichier, vector<shared_ptr<Item>> bibliotheque);
+
+private:
+
+	string auteur_;
+	int mCopiesVendues_, nPages_;
+};
+
+class Affichable
+{
+public:
+	virtual void afficher(ostream& os) const = 0;
+	virtual ~Affichable() = default;
 };

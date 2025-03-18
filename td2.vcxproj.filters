@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\..\Downloads\livres.txt">
-      <Filter>Fichiers de ressources</Filter>
+      <Filter>Fichiers sources</Filter>
     </Text>
   </ItemGroup>
 </Project>
